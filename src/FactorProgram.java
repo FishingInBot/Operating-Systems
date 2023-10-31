@@ -25,9 +25,9 @@ public class FactorProgram {
 }
 
 class FactorThread extends Thread {
-    private int id;
-    private int totalThreads;
-    private int number;
+    private final int id;
+    private final int totalThreads;
+    private final int number;
 
     public FactorThread(int id, int totalThreads, int number) {
         this.id = id;
