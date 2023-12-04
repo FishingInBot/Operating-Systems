@@ -3,24 +3,46 @@ import java.util.List;
 
 public class FactorProgram {
     public static void main(String[] args) {
-        int threads = 5;
-        int number = 600000;
 
-        if (args.length > 0) {
-            threads = Integer.parseInt(args[0]);
+
+    //i will be the number of threads
+        for(int i = 1;i <=10;i++){
+        System.out.println("Running with " + i + " threads");
+        //k will be the number of times we run the program per thread count
+        for (int k = 0; k < 5; k++) {
+            //time for memes
+            meme(i, 60000);
         }
-        if (args.length > 1) {
-            number = Integer.parseInt(args[1]);
-        }
+        System.out.println("--------------------------------------------------");
+    }
+}
+
+    public static void meme(int threadNum, int number) {
+        //Start timing now.
+        long startTime = System.currentTimeMillis();
+        System.out.println("Starting time: " + startTime);
 
         List<FactorThread> factorThreads = new ArrayList<>();
-        for (int i = 0; i < threads; i++) {
-            factorThreads.add(new FactorThread(i, threads, number));
+        for (int i = 0; i < threadNum; i++) {
+            factorThreads.add(new FactorThread(i, threadNum, number));
         }
 
         for (FactorThread thread : factorThreads) {
             thread.start();
         }
+        // Wait until all tasks are finished
+        while (Thread.activeCount()>2){
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //Stop timing now.
+        long endTime = System.currentTimeMillis();
+        System.out.println("Thread Ending time: " + endTime);
+        System.out.println("total time: " + (endTime - startTime));
     }
 }
 
@@ -39,7 +61,7 @@ class FactorThread extends Thread {
     public void run() {
         for (int i = id; i <= number; i += totalThreads) {
             if (isPrime(i)) {
-                System.out.println(i + " is prime");
+                //DO NOTHING! I DONT WANT OUTPUT :)
             }
         }
     }
