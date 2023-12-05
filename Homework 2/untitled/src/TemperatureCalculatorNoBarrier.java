@@ -1,4 +1,3 @@
-import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -7,7 +6,7 @@ import java.util.concurrent.TimeUnit;
  * This class is responsible for calculating the temperature of the grid using the Jacobi method.
  * @author Brandon Murry
  */
-public class TemperatureCalculator {
+public class TemperatureCalculatorNoBarrier {
     // Global Variables for the class and the grid
     private static final double CONVERGENCE_THRESHOLD = 5.0;
     private static final int NUM_THREADS = 1;
@@ -31,15 +30,15 @@ public class TemperatureCalculator {
                 executor.submit(new TemperatureCalculatorThread(i, 1));
                 executor.submit(new TemperatureCalculatorThread(1, i));
             }
+        } while((totalError > CONVERGENCE_THRESHOLD) || (Double.isNaN(totalError)));
             // when no more to submit, call shutdown, submitted jobs will continue to run
-            executor.shutdown();
+            executor.shutdownNow();
             // now wait for the jobs to finish
             try {
                 executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } while((totalError > CONVERGENCE_THRESHOLD) || (Double.isNaN(totalError)));
         long endTime = System.currentTimeMillis();
         System.out.println("Grid: ");
         for (Double[] row : grid) {
