@@ -14,6 +14,8 @@ public class TemperatureCalculatorNoBarrier {
     private static final Double[][] grid = gridMaker.getGrid();
     private static final int GRID_SIZE = grid.length;
 
+
+
     /**
      * main method for the class. Calculates the temperature of the grid using the Jacobi method.
      * @param args Does not take args.
@@ -21,12 +23,12 @@ public class TemperatureCalculatorNoBarrier {
     public static void main(String[] args){
         int iterations = 0;
         double totalError;
-        long startTime = System.currentTimeMillis();
         ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
+        long startTime = System.currentTimeMillis();
         do {
             totalError = calculateTotalError();
             iterations++;
-            for (int i = GRID_SIZE-1; i > 0; i--) {
+            for (int i = GRID_SIZE -1; i > 0; i--) {
                 executor.submit(new TemperatureCalculatorThread(i, 1));
                 executor.submit(new TemperatureCalculatorThread(1, i));
             }
@@ -63,8 +65,8 @@ public class TemperatureCalculatorNoBarrier {
      */
     private static double calculateTotalError() {
         double totalError = 0;
-        for (int i = 1; i < GRID_SIZE-2; i++) {
-            for (int j = 1; j < GRID_SIZE-2; j++) {
+        for (int i = 1; i < GRID_SIZE -2; i++) {
+            for (int j = 1; j < GRID_SIZE -2; j++) {
                 double currentError = Math.abs(grid[i][j] - neighborAverage(i, j));
                 totalError += currentError;
             }
@@ -81,19 +83,19 @@ public class TemperatureCalculatorNoBarrier {
     private static double neighborAverage(int row, int col) {
         double sum = 0;
         int count = 0;
-        if (row > 0 && grid[row - 1][col] != 0.0){
+        if (grid[row - 1][col] != 0.0){
             sum += grid[row - 1][col];
             count++;
         }
-        if (row < GRID_SIZE - 1 && grid[row + 1][col] != 0.0){
+        if (grid[row + 1][col] != 0.0){
             sum += grid[row + 1][col];
             count++;
         }
-        if (col > 0 && grid[row][col - 1] != 0.0){
+        if (grid[row][col - 1] != 0.0){
             sum += grid[row][col - 1];
             count++;
         }
-        if (col < GRID_SIZE - 1 && grid[row][col + 1] != 0.0) {
+        if (grid[row][col + 1] != 0.0) {
             sum += grid[row][col + 1];
             count++;
         }
@@ -124,7 +126,7 @@ public class TemperatureCalculatorNoBarrier {
         @Override
         public void run() {
             //Start from the row/column given, then run diagonally across the grid
-            while(row<GRID_SIZE-1 && column<GRID_SIZE-1) {
+            while(row< GRID_SIZE -1 && column< GRID_SIZE -1) {
                 if(grid[row-1][column] != 0.0 || grid[row+1][column] != 0.0 || grid[row][column-1] != 0.0 || grid[row][column+1] != 0.0) {
                     grid[row][column] = neighborAverage(row, column);
                 }
